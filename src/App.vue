@@ -19,7 +19,7 @@ const handleOpenRecords = () => {
   });
 
   recordsDialogVisible.value = true;
-}
+} 
 </script>
 
 <template>

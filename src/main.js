@@ -6,7 +6,7 @@ import './assets/base.css'
 import ElementPlus from 'element-plus'
 
 import { createApp } from 'vue'
-import App from './App.vue'
+import App from './App.vue';
 
 const app = createApp(App);
 
