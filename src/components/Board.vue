@@ -1,5 +1,50 @@
 <script setup>
-import { onMounted } from 'vue';
+import { ElDialog, ElForm, ElFormItem, ElText, ElButton, ElNotification, ElAlert } from 'element-plus';
+import { onMounted, ref } from 'vue';
+
+const dialogVisible = ref(false);
+const inputValue = ref('');
+const time = ref(0);
+
+const handleWin = () => {
+	dialogVisible.value = true;
+	ElNotification({
+		title: '¡Has ganado!',
+		message: '¡Felicidades! Has logrado colocar todas las reinas en el tablero sin que se amenacen entre ellas.',
+		type: 'success',
+		duration: 5000
+	});
+}
+
+const handleCloseWinDialog = () => {
+	if (inputValue.value) {
+		const records = JSON.parse(window.localStorage.getItem('records')) || [];
+
+		records.push({
+			name: inputValue.value,
+			time: time.value,
+			date: new Date().toLocaleDateString()
+		});
+		window.localStorage.setItem('records', JSON.stringify(records));
+
+		dialogVisible.value = false;
+		inputValue.value = '';
+
+		ElNotification.success({
+			title: '¡Registro exitoso!',
+			message: 'Tu record ha sido registrado con éxito.',
+			type: 'success',
+			duration: 5000
+		});
+	} else {
+		ElNotification.error({
+			title: '¡Error!',
+			message: 'Debes ingresar tu nombre para registrar tu record.',
+			type: 'error',
+			duration: 5000
+		});
+	}
+}
 
 onMounted(() => {
 	const PIECES = {
@@ -16,6 +61,7 @@ onMounted(() => {
 		'black-knight': '♞',
 		'black-pawn': '♟'
 	};
+
 
 	const COLORS = [
 		"#ffffff",
@@ -153,7 +199,8 @@ onMounted(() => {
 	class Game {
 		constructor() {
 			this.board = new Board(8);
-
+			this.time = 0;
+			this.playing = true;
 			this.domBoard = document.getElementById('board');
 
 			// Set dataset
@@ -164,11 +211,24 @@ onMounted(() => {
 				}
 			}
 
+			// Start count time
+			this.countTime();
+
 			this.setEventListeners();
 			this.renderBoard();
 		}
 
 		restarting = false;
+
+		countTime() {
+			setTimeout(() => {
+				if (this.playing) {
+					this.time++;
+					time.value = this.time;
+					this.countTime();
+				}
+			}, 1000);
+		}
 
 		renderBoard() {
 			this.board.matrice.forEach((row, i) => {
@@ -254,13 +314,14 @@ onMounted(() => {
 					clone.innerHTML = 'Reiniciar'
 
 					this.killPieces();
+					this.playing = false;
 
 					setTimeout(() => {
+						time.value = 0;
 						game = new Game();
 						this.restarting = false;
 					}, 1000)
 				}
-
 			})
 
 			el.parentNode.replaceChild(clone, el)
@@ -308,15 +369,15 @@ onMounted(() => {
 		}
 
 		winGame() {
+			this.playing = false;
 			let el = document.getElementById('restartButton')
 			el.innerHTML = 'Jugar de nuevo'
 
-			document.getElementById('alertMessage').innerText = '¡Has ganado!'
-			document.getElementById('alertMessage').style.color = '#4a934a'
-			document.querySelector('.Alert').style.display = 'flex';
+			handleWin();
 		}
 
 		loseGame() {
+			this.playing = false;
 			let el = document.getElementById('restartButton')
 			el.innerHTML = 'Reintentar'
 
@@ -335,6 +396,31 @@ onMounted(() => {
 </script>
 
 <template>
+	<ElDialog v-model="dialogVisible" title="¡Has ganado!" width="500px">
+		<ElText>
+			<ElText size="large" tag="b">¡Felicidades!</ElText>
+			Has logrado colocar todas las reinas en el tablero sin que se
+			amenacen entre ellas.
+		</ElText>
+		<div class="mb-4"></div>
+		<!-- Registrar nombre del record -->
+		<ElForm>
+			<div class="mb-2">
+				<ElText>
+					Registra tu nombre para que aparezca en el ranking:
+				</ElText>
+			</div>
+			<ElFormItem label="Nombre">
+				<ElInput v-model="inputValue" />
+			</ElFormItem>
+		</ElForm>
+		<div class="flex justify-end">
+			<ElButton type="success" plain @click="handleCloseWinDialog">
+				Confirmar
+			</ElButton>
+		</div>
+	</ElDialog>
+	<el-alert :title="`Tiempo: ${time ? time : '0'}s`" type="success" class="!mb-3" :closable="false" />
 	<div class="Board" id="board">
 		<div class="Row">
 			<div class="Square">
