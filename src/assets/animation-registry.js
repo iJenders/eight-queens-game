@@ -1,9 +1,9 @@
 // LIsta de animaciones
 
 const ANIMATIONS = [
-    {
-      name: "circle",
-      css: `
+  {
+    name: "circle",
+    css: `
         ::view-transition-group(root) { 
           animation-timing-function: var(--expo-out); 
         }
@@ -21,10 +21,10 @@ const ANIMATIONS = [
           } 
         }
       `,
-    },
-    {
-      name: "circle-with-blur",
-      css: `
+  },
+  {
+    name: "circle-with-blur",
+    css: `
         ::view-transition-group(root) {
           animation-timing-function: var(--expo-out);
         }
@@ -46,10 +46,10 @@ const ANIMATIONS = [
           }
         }
       `,
-    },
-    {
-      name: "circle-blur-top-left",
-      css: `
+  },
+  {
+    name: "circle-blur-top-left",
+    css: `
         ::view-transition-group(root) {
           animation-timing-function: var(--expo-out);
         }
@@ -71,10 +71,10 @@ const ANIMATIONS = [
           }
         }
       `,
-    },
-    {
-      name: "polygon",
-      css: `
+  },
+  {
+    name: "polygon",
+    css: `
         ::view-transition-group(root) {
           animation-duration: 0.7s;
           animation-timing-function: var(--expo-out);
@@ -107,10 +107,10 @@ const ANIMATIONS = [
           }
         }
       `,
-    },
-    {
-      name: "polygon-gradient",
-      css: `
+  },
+  {
+    name: "polygon-gradient",
+    css: `
         ::view-transition-group(root) {
           animation-timing-function: var(--expo-out);
         }
@@ -131,10 +131,10 @@ const ANIMATIONS = [
           }
         }
       `,
-    },
-    {
-      name: "gif-1",
-      css: `
+  },
+  {
+    name: "gif-1",
+    css: `
         ::view-transition-group(root) {
           animation-timing-function: var(--expo-in);
         }
@@ -161,10 +161,10 @@ const ANIMATIONS = [
           }
         }
       `,
-    },
-    {
-      name: "gif-2",
-      css: `
+  },
+  {
+    name: "gif-2",
+    css: `
         ::view-transition-group(root) {
           animation-timing-function: var(--expo-in);
         }
@@ -191,5 +191,7 @@ const ANIMATIONS = [
           }
         }
       `,
-    },
-  ];
+  },
+];
+
+export default ANIMATIONS;
